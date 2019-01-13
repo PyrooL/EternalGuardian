@@ -1,3 +1,2 @@
-/pycache
-/pycache/*
+/__pycache__
 /EGKeys.py
