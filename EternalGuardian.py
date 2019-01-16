@@ -24,7 +24,7 @@ async def on_ready():
 async def captcha_instructions():
     await client.wait_until_ready()
     if datetime.datetime.now().hour == 0 and datetime.datetime.now().minute == 0:
-        EGwelcome_channel.send('Welcome, Adventurer! To verify you\'re not a bot, please type the captcha: \"{}\"'.format(EGcaptcha))
+        EGwelcome_channel.send('Welcome, Adventurer! To verify you\'re not a bot, please type the captcha: \"{}\"'.format(EGcaptcha), delete_after=86400)
 
 @client.event
 async def on_message(message):
@@ -56,17 +56,20 @@ async def _kick(ctx, member : discord.Member):
     await member.kick()
     await ctx.send('Kicked')
 
-@client.command()
+@client.command(name = "ban")
 @commands.has_permissions(manage_roles=True, ban_members=True)
 async def _ban(ctx, member : discord.Member):
     await ctx.send('{0} just got SokoBanned!'.format(ctx.author.mention))
     await member.ban()
 
-@client.command(name = "ban")
+@client.command()
 @commands.has_permissions(administrator=True)
 async def verifyall(ctx):
-    for vmember in ctx.guild.members():
-        await vmember.add_role(EGverified_role)
+    for vmember in ctx.guild.members:
+        if EGverified_role not in vmember.roles:
+            await vmember.add_roles(EGverified_role)
+            if EGverified_role in vmember.roles:
+                print('{0} is verified'.format(vmember.name))
     await ctx.send('all members verfied')
 
 @client.command()
