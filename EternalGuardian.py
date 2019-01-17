@@ -74,7 +74,7 @@ async def verifyall(ctx):
 
 @client.command()
 async def source(ctx):
-    ctx.send('https://github.com/PyrooL/EternalGuardian')
+    await ctx.send('https://github.com/PyrooL/EternalGuardian')
 
 @client.event
 async def on_error(ctx,error):
