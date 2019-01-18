@@ -24,7 +24,7 @@ async def on_ready():
 async def captcha_instructions():
     await client.wait_until_ready()
     if datetime.datetime.now().hour == 0 and datetime.datetime.now().minute == 0:
-        EGwelcome_channel.send('Welcome, Adventurer! To verify you\'re not a bot, please type the captcha: \"{}\"'.format(EGcaptcha), delete_after=86400)
+        EGwelcome_channel.send('Welcome, Adventurer! To verify you\'re not a bot, please type the captcha, which is in #rules-faq. Please read all of the rules carefully.', delete_after=86400)
 
 @client.event
 async def on_message(message):
@@ -81,7 +81,6 @@ async def on_error(ctx,error):
     if isinstance(error, commands.CommandNotFound):  # fails silently
         pass
     elif isinstance(error, commands.MissingPermissions):
-        print("You\'re not high enough level to do that...")
         await ctx.send('You\'re not high enough level to do that...')
 
 client.run(TOKEN)
