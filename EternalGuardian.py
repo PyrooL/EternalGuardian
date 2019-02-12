@@ -32,7 +32,8 @@ async def on_message(message):
     for word in banned_list:
         if word in message.content:
             mod_channel = discord.utils.get(EGguild.text_channels, id = 207537092467621889)
-            await mod_channel.send('Slur detected in {0} by user {1}.'.format(message.channel,message.author.mention))
+            await mod_channel.send('Slur detected in #{0} by user {1}.'.format(message.channel,message.author.mention))
+            await mod_channel.send('{}'.format(message.content))
     if not message.author == client.user:
         if message.channel == EGwelcome_channel:
             if message.content == EGcaptcha:
