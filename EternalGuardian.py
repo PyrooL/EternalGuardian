@@ -43,7 +43,7 @@ async def on_message(message):
                 await message.channel.send('captcha failed',delete_after=3.0)
             await message.delete()
 
-        if 'rougelike' in message.content:
+        if 'rougelike' in message.content.lower():
             await message.channel.send('It\'s spelled *rogue*like.')
     await client.process_commands(message)
 
@@ -76,6 +76,10 @@ async def verifyall(ctx):
 @client.command()
 async def source(ctx):
     await ctx.send('https://github.com/PyrooL/EternalGuardian')
+
+@client.command()
+async def members(ctx):
+    await ctx.send(str(ctx.guild.member_count))
 
 @client.event
 async def on_error(ctx,error):
