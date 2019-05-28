@@ -1118,3 +1118,7 @@ Task was destroyed but it is pending!
 task: <Task pending coro=<DiscordWebSocket.close_connection() running at /home/bots/.local/lib/python3.7/site-packages/discord/gateway.py:523> wait_for=<Future pending cb=[<TaskWakeupMethWrapper object at 0x7f2787a183d8>()]> cb=[shield.<locals>._done_callback() at /usr/lib/python3.7/asyncio/tasks.py:776]>
 Task was destroyed but it is pending!
 task: <Task pending coro=<BotBase.close() running at /home/bots/.local/lib/python3.7/site-packages/discord/ext/commands/bot.py:208> wait_for=<Future pending cb=[<TaskWakeupMethWrapper object at 0x7f278758d498>()]> cb=[Client._do_cleanup.<locals>.when_future_is_done() at /home/bots/.local/lib/python3.7/site-packages/discord/client.py:498]>
+  File "EternalGuardian.py", line 32
+    if not message.channel == EGmod_channel
+                                          ^
+SyntaxError: invalid syntax
