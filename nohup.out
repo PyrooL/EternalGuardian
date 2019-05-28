@@ -1122,3 +1122,7 @@ task: <Task pending coro=<BotBase.close() running at /home/bots/.local/lib/pytho
     if not message.channel == EGmod_channel
                                           ^
 SyntaxError: invalid syntax
+  File "EternalGuardian.py", line 34
+    await EGmod_channel.send('Slur detected in #{0} by user {1}.'.format(message.channel,message.author.mention))
+        ^
+SyntaxError: invalid syntax

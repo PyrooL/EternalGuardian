@@ -30,8 +30,8 @@ async def on_message(message):
         if word in message.content.lower():
             print(str(message.channel))
             if not message.channel == EGmod_channel:
-                print('Slur detected {} '.format(message.channel)+str(datetime.datetime.now)
-                await EGmod_channel.send('Slur detected in #{0} by user {1}.'.format(message.channel,message.author.mention))
+                print('Slur detected {} '.format(message.channel))
+                await EGmod_channel.send('Slur detected in #{0} by user {1}.'.format(message.channel, message.author.mention))
                 await EGmod_channel.send('`{}`'.format(message.content))
     if not message.author == client.user:
         if message.channel == EGwelcome_channel:
