@@ -21,17 +21,12 @@ async def on_ready():
     EGverified_role = discord.utils.get(EGguild.roles, name = 'Adventurer')
     EGcaptcha = 'a wizard lizard with a gizzard in a blizzard'
 
-async def captcha_instructions():
-    await client.wait_until_ready()
-    if datetime.datetime.now().hour == 0 and datetime.datetime.now().minute == 0:
-        EGwelcome_channel.send('Welcome, Adventurer! To verify you\'re not a bot, please type the captcha, which is in #rules-faq. Please read all of the rules carefully.', delete_after=86400)
-
 @client.event
 async def on_message(message):
     banned_list = ['nigg', 'chink', 'noxico']
     mod_channel = discord.utils.get(EGguild.text_channels, id = 207537092467621889)
     for word in banned_list:
-        if word in message.content and message.channel != mod_channel:
+        if word in message.content and message.channel.id != mod_channel:
             await mod_channel.send('Slur detected in #{0} by user {1}.'.format(message.channel,message.author.mention))
             await mod_channel.send('{}'.format(message.content))
     if not message.author == client.user:
