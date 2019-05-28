@@ -15,18 +15,18 @@ async def on_ready():
     print(client.user.id)
     print('------') 
 
-    global EGguild, EGwelcome_channel, EGverified_role, EGcaptcha
+    global EGguild, EGwelcome_channel, EGmod_channel, EGverified_role, EGcaptcha
     EGguild = discord.utils.get(client.guilds, id = 205277826788622337)
     EGwelcome_channel = discord.utils.get(EGguild.text_channels, id = 533125618309529620)
+    EGmod_channel = discord.utils.get(EGguild.text_channels, id = 207537092467621889)
     EGverified_role = discord.utils.get(EGguild.roles, name = 'Adventurer')
     EGcaptcha = 'a wizard lizard with a gizzard in a blizzard'
 
 @client.event
 async def on_message(message):
     banned_list = ['nigg', 'chink', 'noxico']
-    mod_channel = discord.utils.get(EGguild.text_channels, id = 207537092467621889)
     for word in banned_list:
-        if word in message.content and message.channel.id != mod_channel:
+        if word in message.content and message.channel != mod_channel:
             await mod_channel.send('Slur detected in #{0} by user {1}.'.format(message.channel,message.author.mention))
             await mod_channel.send('{}'.format(message.content))
     if not message.author == client.user:
