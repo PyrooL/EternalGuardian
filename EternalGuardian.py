@@ -13,6 +13,7 @@ async def on_ready():
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
+    print(datetime.datetime.now())
     print('------') 
 
     global EGguild, EGwelcome_channel, EGverified_role, EGcaptcha
@@ -26,9 +27,10 @@ async def on_message(message):
     banned_list = ['nigg', 'chink', 'noxico']
     mod_channel = discord.utils.get(EGguild.text_channels, id = 207537092467621889)
     for word in banned_list:
-        if word in message.content and message.channel.id != mod_channel:
-            await mod_channel.send('Slur detected in #{0} by user {1}.'.format(message.channel,message.author.mention))
-            await mod_channel.send('{}'.format(message.content))
+        if word in message.content:
+	    if message.channel.id != mod_channel.id:
+                await mod_channel.send('Slur detected in #{0} by user {1}.'.format(message.channel,message.author.mention))
+            	await mod_channel.send('{}'.format(message.content))
     if not message.author == client.user:
         if message.channel == EGwelcome_channel:
             if message.content == EGcaptcha:
@@ -44,6 +46,7 @@ async def on_message(message):
 
 @client.command()
 async def echo(ctx, *, text : str):
+    print(text)
     await ctx.send(text)
 
 @client.command(name = "kick")
