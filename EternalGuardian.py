@@ -9,7 +9,7 @@ import datetime
 
 # the following files not included on github, must be manually created after cloning
 from EGKeys import TOKEN
-from banned_words import banned_list
+from banned_words import *
 
 client = commands.Bot(command_prefix='&')
 
@@ -28,7 +28,16 @@ async def on_ready():
     EGwelcome_channel = discord.utils.get(EGguild.text_channels, id = 533125618309529620)
     EGmod_channel = discord.utils.get(EGguild.text_channels, id = 207537092467621889)
     EGverified_role = discord.utils.get(EGguild.roles, name = 'Adventurer')
+    EGmute_role = discord.utils.get(EGguild.roles, name = 'Mute')
+
     EGcaptcha = 'a wizard lizard with a gizzard in a blizzard'
+
+@client.event
+async def on_member_join(message):
+    for word in insta:
+        if word in member.name.lower():
+            await EGmod_channel.send('Autobanned user ||'+member.mention+'|| on join.')
+            await member.ban()
 
 @client.event
 async def on_message(message):
@@ -43,20 +52,28 @@ async def on_message(message):
 
         for word in banned_list: # censored words
             if word in message.content.lower():
-                print(str(message.channel))
                 if not message.channel == EGmod_channel:
                     print('Slur detected {} '.format(str(message.channel)))
                     # notifies mod channel if a slur is detected
-                    await EGmod_channel.send('Slur detected in #{0} by user {1}.'.format(message.channel, message.author.mention))
-                    await EGmod_channel.send('`{}`'.format(message.content))
-                    
+                    await EGmod_channel.send('@here Slur detected in #{0} by user {1}. Message content: `||{2}||`'.format(message.channel, message.author.mention, message.content))
+                    await EGmod_channel.send(message.jump_url)
+
+        for word in insta: # instant ban/mute words
+            if word in message.content.lower():
+                if not message.channel == EGmod_channel:
+                    print('Auto mute in {} '.format(str(message.channel)))
+                    await message.author.add_roles(EGmute_role)
+                    await message.channel.send('Automatically muted :oncoming_police_car:')
+                    await EGmod_channel.send('@Mod Auto-mute in #{0} by user {1}. Message content: `||{2}||`'.format(message.channel, message.author.mention, message.content))
+                    await EGmod_channel.send(message.jump_url)
+      
         if 'rougelike' in message.content.lower(): 
             await message.channel.send('It\'s spelled *rogue*like.')
     await client.process_commands(message)
 
 @client.command() # echo command
 async def echo(ctx, *, text : str):
-    print(text)
+    print('ECHO '+text)
     await ctx.send(text)
 
 @client.command(name = "kick") # kick command
@@ -68,7 +85,7 @@ async def _kick(ctx, member : discord.Member):
 @client.command(name = "ban") # ban command 
 @commands.has_permissions(manage_roles=True, ban_members=True)
 async def _ban(ctx, member : discord.Member):
-    await ctx.send('{0} just got SokoBanned!'.format(ctx.author.mention))
+    await ctx.send('{0} just got SokoBanned! :banhammer:'.format(ctx.author.mention))
     await member.ban()
 
 @client.command() # admin-only command to add the Adventurer role to everyone, outputs progress to log, takes time because of rate limiting
@@ -80,6 +97,16 @@ async def verifyall(ctx):
             if EGverified_role in vmember.roles:
                 print('{0} is verified'.format(vmember.name))
     await ctx.send('all members verfied')
+
+@client.command() # command that locks the channel
+@commands.has_permissions(manage_channels=True)
+async def lock(ctx):
+    await ctx.channel.set_permissions(EGverified_role, send_messages=False)
+
+@client.command() # command that unlocks the channel
+@commands.has_permissions(manage_channels=True)
+async def unlock(ctx):
+    await ctx.channel.set_permissions(EGverified_role, send_messages=True)
 
 @client.command() # links source
 async def source(ctx):
