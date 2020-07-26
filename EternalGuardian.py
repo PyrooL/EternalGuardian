@@ -55,7 +55,7 @@ async def on_message(message):
                 if not message.channel == EGmod_channel:
                     print('Slur detected {} '.format(str(message.channel)))
                     # notifies mod channel if a slur is detected
-                    await EGmod_channel.send('@here Slur detected in #{0} by user {1}. Message content: `||{2}||`'.format(message.channel, message.author.mention, message.content))
+                    await EGmod_channel.send('@here Slur detected in #{0} by user {1}. Message content: ||{2}||'.format(message.channel, message.author.mention, message.content))
                     await EGmod_channel.send(message.jump_url)
 
         for word in insta: # instant ban/mute words
@@ -64,7 +64,7 @@ async def on_message(message):
                     print('Auto mute in {} '.format(str(message.channel)))
                     await message.author.add_roles(EGmute_role)
                     await message.channel.send('Automatically muted :oncoming_police_car:')
-                    await EGmod_channel.send('@Mod Auto-mute in #{0} by user {1}. Message content: `||{2}||`'.format(message.channel, message.author.mention, message.content))
+                    await EGmod_channel.send('@Mod Auto-mute in #{0} by user {1}. Message content: ||{2}||'.format(message.channel, message.author.mention, message.content))
                     await EGmod_channel.send(message.jump_url)
       
         if 'rougelike' in message.content.lower(): 
