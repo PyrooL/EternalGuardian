@@ -23,21 +23,45 @@ async def on_ready():
     print('------') 
 
     # replace with new IDs if using in a different server
-    global EGguild, EGwelcome_channel, EGmod_channel, EGverified_role, EGcaptcha
+    global EGguild, EGwelcome_channel, EGmod_channel, EGverified_role, EGcaptcha, EGmute_role, EGlog_channel
     EGguild = discord.utils.get(client.guilds, id = 205277826788622337)
     EGwelcome_channel = discord.utils.get(EGguild.text_channels, id = 533125618309529620)
     EGmod_channel = discord.utils.get(EGguild.text_channels, id = 207537092467621889)
+    EGlog_channel = discord.utils.get(EGguild.text_channels, id = 261352132496588800)
     EGverified_role = discord.utils.get(EGguild.roles, name = 'Adventurer')
     EGmute_role = discord.utils.get(EGguild.roles, name = 'Mute')
 
     EGcaptcha = 'a wizard lizard with a gizzard in a blizzard'
 
 @client.event
-async def on_member_join(message):
+async def on_member_join(member):
     for word in insta:
         if word in member.name.lower():
             await EGmod_channel.send('Autobanned user ||'+member.mention+'|| on join.')
             await member.ban()
+            break
+
+@client.event
+async def on_member_update(before,after):
+    if after.nick != before.nick:
+        await EGlog_channel.send('{0} updated their nickname to {1}.'.format(before.display_name,after.display_name))
+        for word in insta:
+            if after.nick != None:
+                if word in after.nick.lower():
+                    await EGmod_channel.send('Autobanned user ||'+after.mention+'|| on nickname update.')
+                    await after.ban()
+                    break
+
+@client.event
+async def on_user_update(before,after):
+    if after.name != before.name:
+        await EGlog_channel.send('#{0} updated their global username to {1}.'.format(before.mention,after.name))
+        for word in insta:
+            if word in after.name.lower():
+                await EGmod_channel.send('Autobanned user ||'+after.mention+'|| on global name update.')
+                member = discord.utils.get(EGguild.members, id = after.id) # i think this is how you have to handle the distinction between member and user, see discord.py docs
+                await member.ban()
+                break
 
 @client.event
 async def on_message(message):
@@ -50,26 +74,29 @@ async def on_message(message):
                 await message.channel.send('captcha failed',delete_after=3.0)
             await message.delete()
 
-        for word in banned_list: # censored words
-            if word in message.content.lower():
-                if not message.channel == EGmod_channel:
-                    print('Slur detected {} '.format(str(message.channel)))
-                    # notifies mod channel if a slur is detected
-                    await EGmod_channel.send('@here Slur detected in #{0} by user {1}. Message content: ||{2}||'.format(message.channel, message.author.mention, message.content))
-                    await EGmod_channel.send(message.jump_url)
-
         for word in insta: # instant ban/mute words
             if word in message.content.lower():
                 if not message.channel == EGmod_channel:
                     print('Auto mute in {} '.format(str(message.channel)))
                     await message.author.add_roles(EGmute_role)
                     await message.channel.send('Automatically muted :oncoming_police_car:')
-                    await EGmod_channel.send('@Mod Auto-mute in #{0} by user {1}. Message content: ||{2}||'.format(message.channel, message.author.mention, message.content))
+                    await EGmod_channel.send('@Mod Auto-mute in #{0} by user ||{1}||. Message content: ||{2}||'.format(message.channel, message.author.mention, message.content))
                     await EGmod_channel.send(message.jump_url)
+
+        for word in banned_list: # censored words
+            if word in message.content.lower():
+                if message.channel != EGmod_channel:
+                    print('Slur detected {} '.format(str(message.channel)))
+                    # notifies mod channel if a slur is detected
+                    await EGmod_channel.send('@here Slur detected in #{0} by user {1}. Message content: ||{2}||'.format(message.channel, message.author.mention, message.content))
+                    await EGmod_channel.send(message.jump_url)
+
       
         if 'rougelike' in message.content.lower(): 
             await message.channel.send('It\'s spelled *rogue*like.')
     await client.process_commands(message)
+
+#-------COMMANDS-------
 
 @client.command() # echo command
 async def echo(ctx, *, text : str):
@@ -101,6 +128,7 @@ async def verifyall(ctx):
 @client.command() # command that locks the channel
 @commands.has_permissions(manage_channels=True)
 async def lock(ctx):
+    print(ctx.channel+' locked')
     await ctx.channel.set_permissions(EGverified_role, send_messages=False)
 
 @client.command() # command that unlocks the channel
