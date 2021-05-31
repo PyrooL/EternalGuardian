@@ -69,9 +69,13 @@ async def on_message(message):
         if message.channel == EGwelcome_channel: # captcha verification
             if message.content == EGcaptcha:
                 await message.channel.send('captcha successful', delete_after=3.0)
+                print("Captcha sucessful, " + datetime.datetime.now())
                 await message.author.add_roles(EGverified_role)
+                print("User verified: {0}#{1}".format(message.author.name, message.author.id))
+                print(message.author.id)
             else:
                 await message.channel.send('captcha failed',delete_after=3.0)
+                print("Captcha failed " + datetime.datetime.now())
             await message.delete()
 
         for word in insta: # instant ban/mute words
