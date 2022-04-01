@@ -67,7 +67,7 @@ async def on_user_update(before,after):
 async def on_message(message):
     if message.author != client.user: # ignores its own messages
         if message.channel == EGwelcome_channel: # captcha verification
-            if message.content == EGcaptcha:
+            if message.content.lower() == EGcaptcha:
                 print("Captcha sucessful, {0}".format(datetime.datetime.now()))
                 await message.author.add_roles(EGverified_role)
                 print("User verified: {0}#{1}, ID {2}".format(message.author.name, message.author.discriminator, message.author.id))
@@ -95,8 +95,8 @@ async def on_message(message):
                     await EGmod_channel.send(message.jump_url)
 
       
-        if 'rougelike' in message.content.lower(): 
-            await message.channel.send('It\'s spelled *rogue*like.')
+        if 'roguelike' in message.content.lower(): 
+            await message.channel.send('It\'s spelled *rouge*like.')
     await client.process_commands(message)
 
 #-------COMMANDS-------
