@@ -96,7 +96,7 @@ async def on_message(message):
 
       
         if 'roguelike' in message.content.lower(): 
-            await message.channel.send('It\'s spelled *rouge*like.')
+            await message.channel.send('It\'s spelled *rogue*like.')
     await client.process_commands(message)
 
 #-------COMMANDS-------
