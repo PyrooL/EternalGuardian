@@ -1,0 +1,22 @@
+{
+    "token" : "put your bot token here",
+    "status" : "roguelikes",
+    "captcha" : "a wizard lizard with a gizzard in a blizzard",
+    "roles" : {
+        "member" : "put the name of your member role here",
+        "mod"    : "put the name of your mod role here"
+    },
+    "errorchannel" : 0,
+    "channels" : {
+        "modchat"       : "put the name of your server's moderation channel here",
+        "entryway"      : "put the name of the channel you want to be the server gateway here",
+        "unifiedchat"   : "put the name of the channel where message sends, edits, and deletes appear",
+        "banskicks"     : "put the name of the channel where bans & kicks will be dumped",
+        "filtercatches" : "put the name of the channel where filter catches will be dumped",
+        "botmessages"   : "put the name of the channel where bot messages will be dumped"
+    },
+    "filter" : {
+        "soft" : ["put regexes for terms you want the mod team to be pinged about but not to be auto-deleted"],
+        "hard" : ["put regexes for terms you want to have auto-deleted and for the offender to be muted over"]
+    }
+}
